@@ -5,7 +5,7 @@ const db = require('../db/connection');
 const seed = require('../db/seeds/seed');
 
 afterAll(() => {
-  if (db.end) db.end();
+  db.end();
 });
 
 beforeEach(() => {
@@ -26,7 +26,7 @@ describe('nc-be-news-app', () => {
       // check its an array
       expect(topics).toBeInstanceOf(Array);
       // Check the array is not empty
-      expect(topics.length);
+      expect(topics.length === 3).toBe(true);
       // Check topics data types are correct
       topics.forEach((topic) => {
         expect(typeof topic.slug).toBe('string');
