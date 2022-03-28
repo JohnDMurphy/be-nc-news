@@ -1,12 +1,12 @@
 const express = require('express');
 const { json } = require('express/lib/response');
-// const {} = require('./controllers/....');
+const { getTopics } = require('./controllers/getTopics.controllers.js');
 
 const app = express();
 
 app.use(express.json());
 
-//
+app.get('/api/topics', getTopics);
 
 app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Route not found!' });
