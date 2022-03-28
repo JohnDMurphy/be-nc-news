@@ -1,11 +1,15 @@
 const express = require('express');
-const {} = require('./controllers/....');
+const { json } = require('express/lib/response');
+// const {} = require('./controllers/....');
 
 const app = express();
+
 app.use(express.json());
 
-app.all('/*', (req, res) => {
-  res.status(404).send({ msg: 'Route not found' });
+//
+
+app.all('*', (req, res) => {
+  res.status(404).send({ msg: 'Route not found!' });
 });
 
 app.use((err, req, res, next) => {
