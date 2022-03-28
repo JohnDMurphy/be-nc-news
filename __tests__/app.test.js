@@ -14,11 +14,6 @@ beforeEach(() => {
 
 describe('nc-be-news-app', () => {
   describe('GET /api/topics', () => {
-    it('Should return a 404 with an incorrect path', async () => {
-      const { body } = await request(app).get('/api/notAPath').expect(404);
-      expect(body.msg).toBe('Route not found!');
-    });
-
     it('Should return a 200 with an array of topic objects', async () => {
       const { body } = await request(app).get('/api/topics').expect(200);
 
@@ -32,6 +27,11 @@ describe('nc-be-news-app', () => {
         expect(typeof topic.slug).toBe('string');
         expect(typeof topic.description).toBe('string');
       });
+    });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
     });
   });
 });
