@@ -54,10 +54,10 @@ describe('nc-be-news-app', () => {
       });
     });
 
-    it('Should return a 404 error if given wrong type for input id', async () => {
+    it('Should return a 400 error if given wrong type for input id', async () => {
       const { body } = await request(app)
         .get('/api/articles/words')
-        .expect(404);
+        .expect(400);
       expect(body.msg).toBe('Incorrect Input Type');
     });
 

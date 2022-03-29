@@ -21,7 +21,7 @@ app.use((err, req, res, next) => {
   const statusArr = ['22P02'];
 
   if (statusArr.includes(err.code)) {
-    res.status(404).send({ msg: 'Incorrect Input Type' });
+    res.status(400).send({ msg: 'Incorrect Input Type' });
   } else if (err.msg === 'the given ID does not exist') {
     res.status(404).send({ msg: err.msg });
   } else {
