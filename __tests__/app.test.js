@@ -75,7 +75,7 @@ describe('nc-be-news-app', () => {
       const { body } = await request(app)
         .patch('/api/articles/1')
         .send({ inc_votes: 2 })
-        .expect(201);
+        .expect(200);
 
       // Check an object is returned
       expect(body.article).toBeInstanceOf(Object);
@@ -102,7 +102,7 @@ describe('nc-be-news-app', () => {
       expect(body.msg).toBe('Incorrect Input Type');
     });
 
-    it.only('Should give a 404 error if id is not in the database', async () => {
+    it('Should give a 404 error if id is not in the database', async () => {
       const { body } = await request(app)
         .patch('/api/articles/100')
         .send({ inc_votes: 2 })

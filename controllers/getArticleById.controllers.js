@@ -34,7 +34,7 @@ exports.updateItemById = async (req, res, next) => {
         msg: 'the given ID does not exist',
       });
     }
-    res.status(201).send({ article: updatedData });
+    res.status(200).send({ article: updatedData });
   } catch (err) {
     next(err);
   }
