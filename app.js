@@ -27,6 +27,8 @@ app.use((err, req, res, next) => {
     res.status(400).send({ msg: 'Incorrect Input Type' });
   } else if (err.msg === 'the given ID does not exist') {
     res.status(404).send({ msg: err.msg });
+  } else if (err.msg === 'There was a problem with the input name') {
+    res.status(400).send({ msg: err.msg });
   } else {
     next(err);
   }

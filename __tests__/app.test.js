@@ -110,5 +110,23 @@ describe('nc-be-news-app', () => {
 
       expect(body.msg).toBe('the given ID does not exist');
     });
+
+    it('Should give a 400 error if incorrect data is sent', async () => {
+      const { body } = await request(app)
+        .patch('/api/articles/1')
+        .send({ inc_botes: 2 })
+        .expect(400);
+
+      expect(body.msg).toBe('There was a problem with the input name');
+    });
+
+    it('Should give a 400 error if incorrect data type is sent', async () => {
+      const { body } = await request(app)
+        .patch('/api/articles/1')
+        .send({ inc_votes: 'hi' })
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
   });
 });

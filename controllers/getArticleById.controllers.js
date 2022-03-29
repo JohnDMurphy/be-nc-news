@@ -26,6 +26,13 @@ exports.updateItemById = async (req, res, next) => {
     const { article_id } = req.params;
     const { inc_votes } = req.body;
 
+    if (inc_votes === undefined) {
+      next({
+        status: 400,
+        msg: 'There was a problem with the input name',
+      });
+    }
+
     const updatedData = await updatedItem(article_id, inc_votes);
 
     if (updatedData === undefined) {
