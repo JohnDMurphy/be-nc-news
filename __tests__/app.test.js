@@ -39,10 +39,11 @@ describe('nc-be-news-app', () => {
     it('Should return an article object with the id given', async () => {
       const { body } = await request(app).get('/api/articles/1').expect(200);
 
+      // Check the call returns an object
       expect(body.article).toBeInstanceOf(Object);
-
+      // Check id is correct
       expect(body.article.article_id).toBe(1);
-
+      // Check the object received is what you should get
       expect(body.article).toEqual({
         article_id: 1,
         title: 'Living in the shadow of a great man',
@@ -58,11 +59,55 @@ describe('nc-be-news-app', () => {
       const { body } = await request(app)
         .get('/api/articles/words')
         .expect(400);
+
       expect(body.msg).toBe('Incorrect Input Type');
     });
 
     it('Should give a 404 error if id is not in the database', async () => {
       const { body } = await request(app).get('/api/articles/100').expect(404);
+
+      expect(body.msg).toBe('the given ID does not exist');
+    });
+  });
+
+  describe('PATCH /api/article/:article_id', () => {
+    it('Should update the votes based on input sent', async () => {
+      const { body } = await request(app)
+        .patch('/api/articles/1')
+        .send({ inc_votes: 2 })
+        .expect(201);
+
+      // Check an object is returned
+      expect(body.article).toBeInstanceOf(Object);
+      // Check the object is the returned item with updated value
+      expect(body.article.votes).toBe(102);
+      // Check no other data has been changed
+      expect(body.article).toEqual({
+        article_id: 1,
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: '2020-07-09T20:11:00.000Z',
+        votes: 102,
+      });
+    });
+
+    it('Should return a 400 error if given wrong type for input id', async () => {
+      const { body } = await request(app)
+        .patch('/api/articles/words')
+        .send({ inc_votes: 2 })
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
+
+    it.only('Should give a 404 error if id is not in the database', async () => {
+      const { body } = await request(app)
+        .patch('/api/articles/100')
+        .send({ inc_votes: 2 })
+        .expect(404);
+
       expect(body.msg).toBe('the given ID does not exist');
     });
   });

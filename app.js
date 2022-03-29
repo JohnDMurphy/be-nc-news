@@ -3,6 +3,7 @@ const { json } = require('express/lib/response');
 const { getTopics } = require('./controllers/getTopics.controllers.js');
 const {
   getArticleById,
+  updateItemById,
 } = require('./controllers/getArticleById.controllers.js');
 
 const app = express();
@@ -12,6 +13,8 @@ app.use(express.json());
 app.get('/api/topics', getTopics);
 
 app.get('/api/articles/:article_id', getArticleById);
+
+app.patch('/api/articles/:article_id', updateItemById);
 
 app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Route not found!' });
