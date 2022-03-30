@@ -81,5 +81,10 @@ describe('nc-be-news-app', () => {
         expect(typeof user.username).toBe('string');
       });
     });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
+    });
   });
 });
