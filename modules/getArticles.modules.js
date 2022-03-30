@@ -15,13 +15,7 @@ exports.selectArticleById = async (article_id) => {
       JOIN comments 
       ON articles.article_id = comments.article_id
       WHERE articles.article_id = $1 
-      GROUP BY articles.article_id,
-      title,
-      topic,
-      articles.author,
-      articles.body,
-      articles.created_at,
-      articles.votes;`,
+      GROUP BY articles.article_id;`,
     [article_id]
   );
 
