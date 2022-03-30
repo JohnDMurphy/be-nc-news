@@ -40,8 +40,9 @@ exports.updateItemById = async (req, res, next) => {
         status: 404,
         msg: 'the given ID does not exist',
       });
+    } else {
+      res.status(200).send({ article: updatedData });
     }
-    res.status(200).send({ article: updatedData });
   } catch (err) {
     next(err);
   }
