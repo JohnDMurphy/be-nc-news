@@ -129,4 +129,25 @@ describe('nc-be-news-app', () => {
       expect(body.msg).toBe('Incorrect Input Type');
     });
   });
+
+  describe('GET /api/users', () => {
+    it('Should return an array of objects with a username property', async () => {
+      const { body } = await request(app).get('/api/users').expect(200);
+
+      const users = body.users;
+      // check its an array
+      expect(users).toBeInstanceOf(Array);
+      // Check the array is not empty
+      expect(users.length === 4).toBe(true);
+      // Check users data type is correct
+      users.forEach((user) => {
+        expect(typeof user.username).toBe('string');
+      });
+    });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
+    });
+  });
 });
