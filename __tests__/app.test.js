@@ -67,19 +67,19 @@ describe('nc-be-news-app', () => {
     });
   });
 
-  // describe('GET /api/users', () => {
-  //   it('Should return an array of objects with a username property', async () => {
-  //     const { body } = await request(app).get('/api/users').expect(200);
+  describe('GET /api/users', () => {
+    it('Should return an array of objects with a username property', async () => {
+      const { body } = await request(app).get('/api/users').expect(200);
 
-  //     const users = body.users;
-  //     // check its an array
-  //     expect(users).toBeInstanceOf(Array);
-  //     // Check the array is not empty
-  //     expect(users.length === 4).toBe(true);
-  //     // Check users data type is correct
-  //     users.forEach((user) => {
-  //       expect(typeof user.username).toBe('string');
-  //     });
-  //   });
-  // });
+      const users = body.users;
+      // check its an array
+      expect(users).toBeInstanceOf(Array);
+      // Check the array is not empty
+      expect(users.length === 4).toBe(true);
+      // Check users data type is correct
+      users.forEach((user) => {
+        expect(typeof user.username).toBe('string');
+      });
+    });
+  });
 });
