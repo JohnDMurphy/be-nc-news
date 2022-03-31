@@ -66,7 +66,6 @@ exports.getCommentsByArticleId = async (req, res, next) => {
     const { article_id } = req.params;
 
     const commentsData = await selectCommentsByArticle(article_id);
-    console.log(commentsData);
 
     if (commentsData.length === 0) {
       next({
