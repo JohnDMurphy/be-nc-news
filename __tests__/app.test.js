@@ -90,7 +90,7 @@ describe('nc-be-news-app', () => {
   });
 
   describe('GET /api/articles', () => {
-    it('Should return an array or articles', async () => {
+    it('Should return an array of articles with comment count included', async () => {
       const { body } = await request(app).get('/api/articles').expect(200);
       const articles = body.articles;
 
@@ -112,6 +112,11 @@ describe('nc-be-news-app', () => {
       expect(articles.length === 12).toBe(true);
       // Check the ordering is DESC
       expect(articles).toEqual(sortedArticles);
+
+      articles.forEach((article) => {
+        expect(typeof article.comment_count).toBe('string');
+        expect(Object.keys(article).length).toBe(7);
+      });
     });
 
     it('Should return a 404 with an incorrect path', async () => {
