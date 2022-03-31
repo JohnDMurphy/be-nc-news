@@ -25,7 +25,7 @@ exports.selectArticleById = async (article_id) => {
 };
 
 exports.updatedItem = async (article_id, inc_votes) => {
-  const text = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`;
+  const text = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`;
 
   const res = await db.query(text, [inc_votes, article_id]);
 
@@ -50,6 +50,17 @@ exports.selectArticles = async () => {
   `);
 
   const data = res.rows;
-  console.log(data);
+
   return data;
+};
+
+exports.addNewComment = async (article_id, username, body) => {
+  console.log(article_id);
+  console.log('response should be under this');
+  const res = await db.query(
+    `INSERT INTO comments (body, article_id, author, created_at, votes) VALUES ($1, $2, $3, current_timestamp, 0) RETURNING *;`,
+    [body, article_id, username]
+  );
+
+  console.log(res);
 };

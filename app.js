@@ -5,6 +5,7 @@ const {
   getArticleById,
   updateItemById,
   getArticles,
+  postCommentById,
 } = require('./controllers/getArticleById.controllers.js');
 const { getUsers } = require('./controllers/getUsers.controllers.js');
 
@@ -21,6 +22,8 @@ app.patch('/api/articles/:article_id', updateItemById);
 app.get('/api/users', getUsers);
 
 app.get('/api/articles', getArticles);
+
+app.post('/api/articles/:article_id/comments', postCommentById);
 
 app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Route not found!' });

@@ -2,6 +2,7 @@ const {
   selectArticleById,
   updatedItem,
   selectArticles,
+  addNewComment,
 } = require('../modules/getArticles.modules.js');
 
 exports.getArticleById = async (req, res, next) => {
@@ -57,4 +58,11 @@ exports.getArticles = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.postCommentById = async (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+
+  const postedData = await addNewComment(article_id, username, body);
 };

@@ -201,4 +201,13 @@ describe('nc-be-news-app', () => {
       expect(body.msg).toBe('Route not found!');
     });
   });
+
+  // describe.only('POST /api/articles/:article_id/comments', () => {
+  //   it('Should post a new comment to an article by its id with a username and body', async () => {
+  //     const { body } = await request(app)
+  //       .post('/api/articles/3/comments')
+  //       .send({ username: 'Morpheus', body: 'Follow the white rabbit...' })
+  //       .expect(201);
+  //   });
+  // });
 });
