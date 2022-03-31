@@ -105,8 +105,6 @@ describe('nc-be-news-app', () => {
         return dateB - dateA;
       });
 
-      console.log(sortedArticles);
-
       expect(articles).toBeInstanceOf(Array);
       // Check the array is not empty
       expect(articles.length === 12).toBe(true);
@@ -115,6 +113,12 @@ describe('nc-be-news-app', () => {
 
       articles.forEach((article) => {
         expect(typeof article.comment_count).toBe('string');
+        expect(typeof article.votes).toBe('number');
+        expect(typeof article.created_at).toBe('string');
+        expect(typeof article.author).toBe('string');
+        expect(typeof article.topic).toBe('string');
+        expect(typeof article.title).toBe('string');
+        expect(typeof article.article_id).toBe('number');
         expect(Object.keys(article).length).toBe(7);
       });
     });
