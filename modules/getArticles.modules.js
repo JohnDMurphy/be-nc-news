@@ -23,3 +23,24 @@ exports.selectArticleById = async (article_id) => {
 
   return data;
 };
+
+exports.selectArticles = async () => {
+  const res = await db.query(`
+  SELECT articles.article_id,
+      title,
+      topic,
+      articles.author,
+      articles.created_at,
+      articles.votes,
+      count(comments.body)
+      AS comment_count
+      FROM articles 
+      LEFT JOIN comments 
+      ON articles.article_id = comments.article_id       
+      GROUP BY articles.article_id
+      ORDER BY articles.created_at DESC;
+  `);
+
+  const data = res.rows;
+  return data;
+};

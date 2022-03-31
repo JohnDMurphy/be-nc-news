@@ -88,4 +88,35 @@ describe('nc-be-news-app', () => {
       expect(body.msg).toBe('Route not found!');
     });
   });
+
+  describe('GET /api/articles', () => {
+    it('Should return an array or articles', async () => {
+      const { body } = await request(app).get('/api/articles').expect(200);
+      const articles = body.articles;
+
+      const articleCopy = articles.map((article) => {
+        return { ...article };
+      });
+
+      const sortedArticles = articleCopy.sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+
+        return dateB - dateA;
+      });
+
+      console.log(sortedArticles);
+
+      expect(articles).toBeInstanceOf(Array);
+      // Check the array is not empty
+      expect(articles.length === 12).toBe(true);
+      // Check the ordering is DESC
+      expect(articles).toEqual(sortedArticles);
+    });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
+    });
+  });
 });
