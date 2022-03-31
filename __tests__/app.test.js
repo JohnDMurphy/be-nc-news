@@ -88,4 +88,54 @@ describe('nc-be-news-app', () => {
       expect(body.msg).toBe('Route not found!');
     });
   });
+
+  describe('GET /api/articles', () => {
+    it('Should return an array of articles with comment count included', async () => {
+      const { body } = await request(app).get('/api/articles').expect(200);
+      const articles = body.articles;
+
+      const articleCopy = articles.map((article) => {
+        return { ...article };
+      });
+
+      const sortedArticles = articleCopy.sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+
+        return dateB - dateA;
+      });
+
+      expect(articles).toBeInstanceOf(Array);
+      // Check the array is not empty
+      expect(articles.length === 12).toBe(true);
+      // Check the ordering is DESC
+      expect(articles).toEqual(sortedArticles);
+
+      articles.forEach((article) => {
+        expect(typeof article.comment_count).toBe('string');
+        expect(typeof article.votes).toBe('number');
+        expect(typeof article.created_at).toBe('string');
+        expect(typeof article.author).toBe('string');
+        expect(typeof article.topic).toBe('string');
+        expect(typeof article.title).toBe('string');
+        expect(typeof article.article_id).toBe('number');
+        expect(Object.keys(article).length).toBe(7);
+      });
+
+      expect(articles[0]).toEqual({
+        article_id: 3,
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        created_at: '2020-11-03T09:12:00.000Z',
+        votes: 0,
+        comment_count: '2',
+      });
+    });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
+    });
+  });
 });
