@@ -50,6 +50,17 @@ exports.selectArticles = async () => {
   `);
 
   const data = res.rows;
-  console.log(data);
+
+  return data;
+};
+
+exports.selectCommentsByArticle = async (article_id) => {
+  const res = await db.query(
+    ` SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;`,
+    [article_id]
+  );
+
+  const data = res.rows;
+
   return data;
 };

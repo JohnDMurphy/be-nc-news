@@ -202,13 +202,54 @@ describe('nc-be-news-app', () => {
     });
   });
 
-  describe('GET article/:article_id/comments', () => {
-    // it('Should return an array of objects for a given article id', async () => {
-    //   const { body } = await request(app)
-    //     .get('/api/articles/1/comments')
-    //     .expect(200);
-    // });
-    // const comments = body.comments;
-    // expect(comments).toBeInstanceOf(Array);
+  describe.only('GET article/:article_id/comments', () => {
+    it('Should return an array of objects for a given article id', async () => {
+      const { body } = await request(app)
+        .get('/api/articles/6/comments')
+        .expect(200);
+
+      const comments = body.comments;
+      // Test it is an array
+      expect(comments).toBeInstanceOf(Array);
+      // Test the array is correct length
+      expect(comments.length).toBe(1);
+      // Test object contains the correct data
+      expect(comments[0].body).toBe('This is a bad article name');
+      comments.forEach((item) => {
+        expect(typeof item.comment_id).toBe('number');
+        expect(typeof item.votes).toBe('number');
+        expect(typeof item.created_at).toBe('string');
+        expect(typeof item.author).toBe('string');
+        expect(typeof item.body).toBe('string');
+      });
+    });
+
+    it('Should return a 400 error if given wrong type for input id', async () => {
+      const { body } = await request(app)
+        .get('/api/articles/words/comments')
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
+
+    it('Should give a 404 error if id is not in the database', async () => {
+      const { body } = await request(app)
+        .get('/api/articles/100/comments')
+        .expect(404);
+
+      expect(body.msg).toBe(
+        'the given ID does not exist or does not have any comments'
+      );
+    });
+
+    it('Should give a 404 error if given id does not have any comments', async () => {
+      const { body } = await request(app)
+        .get('/api/articles/2/comments')
+        .expect(404);
+
+      expect(body.msg).toBe(
+        'the given ID does not exist or does not have any comments'
+      );
+    });
   });
 });

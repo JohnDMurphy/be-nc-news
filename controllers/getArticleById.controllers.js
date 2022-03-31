@@ -2,6 +2,7 @@ const {
   selectArticleById,
   updatedItem,
   selectArticles,
+  selectCommentsByArticle,
 } = require('../modules/getArticles.modules.js');
 
 exports.getArticleById = async (req, res, next) => {
@@ -15,8 +16,9 @@ exports.getArticleById = async (req, res, next) => {
         status: 404,
         msg: 'the given ID does not exist',
       });
+    } else {
+      res.status(200).send({ article: articleData });
     }
-    res.status(200).send({ article: articleData });
   } catch (err) {
     next(err);
   }
@@ -54,6 +56,26 @@ exports.getArticles = async (req, res, next) => {
     const articleData = await selectArticles();
 
     res.status(200).send({ articles: articleData });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getCommentsByArticleId = async (req, res, next) => {
+  try {
+    const { article_id } = req.params;
+
+    const commentsData = await selectCommentsByArticle(article_id);
+    console.log(commentsData);
+
+    if (commentsData.length === 0) {
+      next({
+        status: 404,
+        msg: 'the given ID does not exist or does not have any comments',
+      });
+    } else {
+      res.status(200).send({ comments: commentsData });
+    }
   } catch (err) {
     next(err);
   }

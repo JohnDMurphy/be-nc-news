@@ -5,6 +5,7 @@ const {
   getArticleById,
   updateItemById,
   getArticles,
+  getCommentsByArticleId,
 } = require('./controllers/getArticleById.controllers.js');
 const { getUsers } = require('./controllers/getUsers.controllers.js');
 
@@ -22,6 +23,8 @@ app.get('/api/users', getUsers);
 
 app.get('/api/articles', getArticles);
 
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
+
 app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Route not found!' });
 });
@@ -35,6 +38,10 @@ app.use((err, req, res, next) => {
     res.status(404).send({ msg: err.msg });
   } else if (err.msg === 'There was a problem with the input name') {
     res.status(400).send({ msg: err.msg });
+  } else if (
+    err.msg === 'the given ID does not exist or does not have any comments'
+  ) {
+    res.status(404).send({ msg: err.msg });
   } else {
     next(err);
   }
