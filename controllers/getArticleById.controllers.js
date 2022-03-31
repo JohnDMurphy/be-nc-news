@@ -1,6 +1,7 @@
 const {
   selectArticleById,
   updatedItem,
+  selectArticles,
 } = require('../modules/getArticles.modules.js');
 
 exports.getArticleById = async (req, res, next) => {
@@ -43,6 +44,16 @@ exports.updateItemById = async (req, res, next) => {
         res.status(200).send({ article: updatedData });
       }
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getArticles = async (req, res, next) => {
+  try {
+    const articleData = await selectArticles();
+
+    res.status(200).send({ articles: articleData });
   } catch (err) {
     next(err);
   }
