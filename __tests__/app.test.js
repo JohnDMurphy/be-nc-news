@@ -151,4 +151,14 @@ describe('nc-be-news-app', () => {
       expect(body.msg).toBe('Route not found!');
     });
   });
+
+  describe('GET article/:article_id/comments', () => {
+    // it('Should return an array of objects for a given article id', async () => {
+    //   const { body } = await request(app)
+    //     .get('/api/articles/1/comments')
+    //     .expect(200);
+    // });
+    // const comments = body.comments;
+    // expect(comments).toBeInstanceOf(Array);
+  });
 });
