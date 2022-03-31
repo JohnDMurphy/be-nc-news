@@ -1,6 +1,7 @@
 const {
   selectArticleById,
   updatedItem,
+  selectArticles,
 } = require('../modules/getArticles.modules.js');
 
 exports.getArticleById = async (req, res, next) => {
@@ -31,18 +32,28 @@ exports.updateItemById = async (req, res, next) => {
         status: 400,
         msg: 'There was a problem with the input name',
       });
-    }
-
-    const updatedData = await updatedItem(article_id, inc_votes);
-
-    if (updatedData === undefined) {
-      next({
-        status: 404,
-        msg: 'the given ID does not exist',
-      });
     } else {
-      res.status(200).send({ article: updatedData });
+      const updatedData = await updatedItem(article_id, inc_votes);
+
+      if (updatedData === undefined) {
+        next({
+          status: 404,
+          msg: 'the given ID does not exist',
+        });
+      } else {
+        res.status(200).send({ article: updatedData });
+      }
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getArticles = async (req, res, next) => {
+  try {
+    const articleData = await selectArticles();
+
+    res.status(200).send({ articles: articleData });
   } catch (err) {
     next(err);
   }
