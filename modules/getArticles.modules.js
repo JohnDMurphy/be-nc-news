@@ -32,7 +32,7 @@ exports.selectArticles = async () => {
       articles.author,
       articles.created_at,
       articles.votes,
-      count(comments.body)
+      count(comments.article_id)
       AS comment_count
       FROM articles 
       LEFT JOIN comments 
@@ -42,5 +42,6 @@ exports.selectArticles = async () => {
   `);
 
   const data = res.rows;
+  console.log(data);
   return data;
 };

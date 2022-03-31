@@ -121,6 +121,16 @@ describe('nc-be-news-app', () => {
         expect(typeof article.article_id).toBe('number');
         expect(Object.keys(article).length).toBe(7);
       });
+
+      expect(articles[0]).toEqual({
+        article_id: 3,
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        created_at: '2020-11-03T09:12:00.000Z',
+        votes: 0,
+        comment_count: '2',
+      });
     });
 
     it('Should return a 404 with an incorrect path', async () => {
