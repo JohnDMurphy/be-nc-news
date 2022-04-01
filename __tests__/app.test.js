@@ -157,22 +157,12 @@ describe('nc-be-news-app', () => {
       const { body } = await request(app).get('/api/articles').expect(200);
       const articles = body.articles;
 
-      const articleCopy = articles.map((article) => {
-        return { ...article };
-      });
-
-      const sortedArticles = articleCopy.sort((a, b) => {
-        const dateA = new Date(a.created_at);
-        const dateB = new Date(b.created_at);
-
-        return dateB - dateA;
-      });
-
       expect(articles).toBeInstanceOf(Array);
       // Check the array is not empty
       expect(articles.length === 12).toBe(true);
       // Check the ordering is DESC
-      expect(articles).toEqual(sortedArticles);
+      console.log(articles);
+      expect(articles).toBeSortedBy('created_at', { descending: true });
 
       articles.forEach((article) => {
         expect(typeof article.comment_count).toBe('string');
