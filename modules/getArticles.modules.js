@@ -55,11 +55,15 @@ exports.selectArticles = async () => {
 };
 
 exports.addNewComment = async (article_id, author, body) => {
-  const res = await db.query(
-    `INSERT INTO comments (body, article_id, author, created_at) VALUES ($1, $2, $3, current_timestamp) RETURNING *`,
-    [body, article_id, author]
-  );
+  if (typeof author !== 'string' || typeof body !== 'string') {
+    return Promise.reject({ status: 400, msg: 'Incorrect Input Type' });
+  } else {
+    const res = await db.query(
+      `INSERT INTO comments (body, article_id, author, created_at) VALUES ($1, $2, $3, current_timestamp) RETURNING *`,
+      [body, article_id, author]
+    );
 
-  const data = res.rows[0];
-  return data;
+    const data = res.rows[0];
+    return data;
+  }
 };
