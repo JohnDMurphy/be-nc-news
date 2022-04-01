@@ -54,13 +54,12 @@ exports.selectArticles = async () => {
   return data;
 };
 
-exports.addNewComment = async (article_id, username, body) => {
-  console.log(article_id);
-  console.log('response should be under this');
+exports.addNewComment = async (article_id, author, body) => {
   const res = await db.query(
-    `INSERT INTO comments (body, article_id, author, created_at, votes) VALUES ($1, $2, $3, current_timestamp, 0) RETURNING *;`,
-    [body, article_id, username]
+    `INSERT INTO comments (body, article_id, author, created_at) VALUES ($1, $2, $3, current_timestamp) RETURNING *`,
+    [body, article_id, author]
   );
 
-  console.log(res);
+  const data = res.rows[0];
+  return data;
 };

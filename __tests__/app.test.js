@@ -202,12 +202,21 @@ describe('nc-be-news-app', () => {
     });
   });
 
-  // describe.only('POST /api/articles/:article_id/comments', () => {
-  //   it('Should post a new comment to an article by its id with a username and body', async () => {
-  //     const { body } = await request(app)
-  //       .post('/api/articles/3/comments')
-  //       .send({ username: 'Morpheus', body: 'Follow the white rabbit...' })
-  //       .expect(201);
-  //   });
-  // });
+  describe('POST /api/articles/:article_id/comments', () => {
+    it('Should post a new comment to an article by its id with a username and body', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/2/comments')
+        .send({ author: 'lurker', body: 'Follow the white rabbit...' })
+        .expect(201);
+
+      const comment = body.comment;
+
+      //Check you get an object back
+      expect(comment).toBeInstanceOf(Object);
+      //Check the returned id is correct
+      expect(comment.comment_id).toBe(19);
+      // Check the amount of items in the object is correct
+      expect(Object.keys(comment).length).toBe(6);
+    });
+  });
 });
