@@ -222,6 +222,7 @@ describe('nc-be-news-app', () => {
       expect(comment.author).toBe('lurker');
       expect(comment.votes).toBe(0);
       expect(comment.comment_id).toBe(19);
+      expect(typeof comment.created_at).toBe('string');
     });
 
     it('Should give a 404 error if id is not in the database', async () => {
