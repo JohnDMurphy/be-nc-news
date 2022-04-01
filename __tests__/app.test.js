@@ -213,10 +213,15 @@ describe('nc-be-news-app', () => {
 
       //Check you get an object back
       expect(comment).toBeInstanceOf(Object);
-      //Check the returned id is correct
-      expect(comment.comment_id).toBe(19);
+
       // Check the amount of items in the object is correct
       expect(Object.keys(comment).length).toBe(6);
+      //Check that you get what you expect from the object
+      expect(comment.body).toBe('Follow the white rabbit...');
+      expect(comment.article_id).toBe(2);
+      expect(comment.author).toBe('lurker');
+      expect(comment.votes).toBe(0);
+      expect(comment.comment_id).toBe(19);
     });
 
     it('Should give a 404 error if id is not in the database', async () => {
