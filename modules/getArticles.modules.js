@@ -25,7 +25,7 @@ exports.selectArticleById = async (article_id) => {
 };
 
 exports.updatedItem = async (article_id, inc_votes) => {
-  const text = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`;
+  const text = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`;
 
   const res = await db.query(text, [inc_votes, article_id]);
 
@@ -63,4 +63,18 @@ exports.selectCommentsByArticle = async (article_id) => {
   const data = res.rows;
 
   return data;
+};
+
+exports.addNewComment = async (article_id, author, body) => {
+  if (typeof author !== 'string' || typeof body !== 'string') {
+    return Promise.reject({ status: 400, msg: 'Incorrect Input Type' });
+  } else {
+    const res = await db.query(
+      `INSERT INTO comments (body, article_id, author, created_at) VALUES ($1, $2, $3, current_timestamp) RETURNING *`,
+      [body, article_id, author]
+    );
+
+    const data = res.rows[0];
+    return data;
+  }
 };

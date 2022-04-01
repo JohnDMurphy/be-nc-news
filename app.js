@@ -6,6 +6,7 @@ const {
   updateItemById,
   getArticles,
   getCommentsByArticleId,
+  postCommentById,
 } = require('./controllers/getArticleById.controllers.js');
 const { getUsers } = require('./controllers/getUsers.controllers.js');
 
@@ -25,6 +26,8 @@ app.get('/api/articles', getArticles);
 
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 
+app.post('/api/articles/:article_id/comments', postCommentById);
+
 app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Route not found!' });
 });
@@ -32,7 +35,12 @@ app.all('*', (req, res) => {
 app.use((err, req, res, next) => {
   const statusArr = ['22P02'];
 
-  if (statusArr.includes(err.code)) {
+  if (err.code === '23503') {
+    res.status(404).send({ msg: 'the given ID does not exist' });
+  } else if (
+    statusArr.includes(err.code) ||
+    err.msg === 'Incorrect Input Type'
+  ) {
     res.status(400).send({ msg: 'Incorrect Input Type' });
   } else if (err.msg === 'the given ID does not exist') {
     res.status(404).send({ msg: err.msg });

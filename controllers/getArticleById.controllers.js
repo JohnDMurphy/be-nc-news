@@ -3,6 +3,7 @@ const {
   updatedItem,
   selectArticles,
   selectCommentsByArticle,
+  addNewComment,
 } = require('../modules/getArticles.modules.js');
 
 exports.getArticleById = async (req, res, next) => {
@@ -75,6 +76,20 @@ exports.getCommentsByArticleId = async (req, res, next) => {
     } else {
       res.status(200).send({ comments: commentsData });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postCommentById = async (req, res, next) => {
+  try {
+    const { article_id } = req.params;
+    const { author, body } = req.body;
+
+    const postedData = await addNewComment(article_id, author, body);
+    console.log(postedData);
+
+    res.status(201).send({ comment: postedData });
   } catch (err) {
     next(err);
   }

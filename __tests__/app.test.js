@@ -252,4 +252,60 @@ describe('nc-be-news-app', () => {
       );
     });
   });
+
+  describe('POST /api/articles/:article_id/comments', () => {
+    it('Should post a new comment to an article by its id with a username and body', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/2/comments')
+        .send({ author: 'lurker', body: 'Follow the white rabbit...' })
+        .expect(201);
+
+      const comment = body.comment;
+
+      //Check you get an object back
+      expect(comment).toBeInstanceOf(Object);
+
+      // Check the amount of items in the object is correct
+      expect(Object.keys(comment).length).toBe(6);
+      //Check that you get what you expect from the object
+      expect(comment.body).toBe('Follow the white rabbit...');
+      expect(comment.article_id).toBe(2);
+      expect(comment.author).toBe('lurker');
+      expect(comment.votes).toBe(0);
+      expect(comment.comment_id).toBe(19);
+      expect(typeof comment.created_at).toBe('string');
+    });
+
+    it('Should give a 404 error if id is not in the database', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/100/comments')
+        .send({ author: 'lurker', body: 'Follow the white rabbit...' })
+        .expect(404);
+
+      expect(body.msg).toBe('the given ID does not exist');
+    });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
+    });
+
+    it('Should give a 400 error if incorrect data is sent', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/1/comments')
+        .send({ author: 'lurker', trh: 'Follow the white rabbit...' })
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
+
+    it('Should give a 400 error if incorrect data type is sent', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/1/comments')
+        .send({ author: 123, body: 1 })
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
+  });
 });
