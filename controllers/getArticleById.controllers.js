@@ -65,9 +65,13 @@ exports.postCommentById = async (req, res, next) => {
     const { article_id } = req.params;
     const { author, body } = req.body;
 
-    const postedData = await addNewComment(article_id, author, body);
+    if (typeof author !== 'string' || typeof body !== 'string') {
+      next({ status: 400, msg: 'Incorrect Input Type' });
+    } else {
+      const postedData = await addNewComment(article_id, author, body);
 
-    res.status(201).send({ comment: postedData });
+      res.status(201).send({ comment: postedData });
+    }
   } catch (err) {
     next(err);
   }

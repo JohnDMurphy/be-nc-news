@@ -218,5 +218,37 @@ describe('nc-be-news-app', () => {
       // Check the amount of items in the object is correct
       expect(Object.keys(comment).length).toBe(6);
     });
+
+    it('Should give a 404 error if id is not in the database', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/100/comments')
+        .send({ author: 'lurker', body: 'Follow the white rabbit...' })
+        .expect(404);
+
+      expect(body.msg).toBe('the given ID does not exist');
+    });
+
+    it('Should return a 404 with an incorrect path', async () => {
+      const { body } = await request(app).get('/api/notAPath').expect(404);
+      expect(body.msg).toBe('Route not found!');
+    });
+
+    it('Should give a 400 error if incorrect data is sent', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/1/comments')
+        .send({ author: 'lurker', trh: 'Follow the white rabbit...' })
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
+
+    it('Should give a 400 error if incorrect data type is sent', async () => {
+      const { body } = await request(app)
+        .post('/api/articles/1/comments')
+        .send({ author: 123, body: 1 })
+        .expect(400);
+
+      expect(body.msg).toBe('Incorrect Input Type');
+    });
   });
 });

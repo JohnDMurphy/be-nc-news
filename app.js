@@ -32,7 +32,12 @@ app.all('*', (req, res) => {
 app.use((err, req, res, next) => {
   const statusArr = ['22P02'];
 
-  if (statusArr.includes(err.code)) {
+  if (err.code === '23503') {
+    res.status(404).send({ msg: 'the given ID does not exist' });
+  } else if (
+    statusArr.includes(err.code) ||
+    err.msg === 'Incorrect Input Type'
+  ) {
     res.status(400).send({ msg: 'Incorrect Input Type' });
   } else if (err.msg === 'the given ID does not exist') {
     res.status(404).send({ msg: err.msg });
