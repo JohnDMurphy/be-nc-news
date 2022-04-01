@@ -32,8 +32,53 @@ exports.updatedItem = async (article_id, inc_votes) => {
   return res.rows[0];
 };
 
-exports.selectArticles = async () => {
-  const res = await db.query(`
+exports.selectArticles = async (sort_by, order, topic = undefined) => {
+  console.log('Still made it ', sort_by, order, topic);
+
+  const validColumns = [
+    'title',
+    'topic',
+    'author',
+    'body',
+    'created_at',
+    'votes',
+  ];
+
+  const validOrder = ['asc', 'desc', 'ASC', 'DESC'];
+
+  if (sort_by) {
+    let query = {
+      text: `SELECT articles.article_id,
+    title,
+    topic,
+    articles.author,
+    articles.created_at,
+    articles.votes,
+    count(comments.article_id)
+    AS comment_count
+    FROM articles 
+    LEFT JOIN comments 
+    ON articles.article_id = comments.article_id   
+     `,
+    };
+
+    if (topic !== undefined) {
+      query.text += 'WHERE topic = $1 ';
+      query.values = [topic];
+    }
+
+    query.text += `GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+
+    const res = await db.query(query);
+    const data = res.rows;
+    console.log(data);
+    if (!data.length) {
+      return Promise.reject({ msg: 'No content', status: 204 });
+    }
+
+    return data;
+  } else {
+    const res = await db.query(`
   SELECT articles.article_id,
       title,
       topic,
@@ -48,10 +93,10 @@ exports.selectArticles = async () => {
       GROUP BY articles.article_id
       ORDER BY articles.created_at DESC;
   `);
+    const data = res.rows;
 
-  const data = res.rows;
-
-  return data;
+    return data;
+  }
 };
 
 exports.addNewComment = async (article_id, author, body) => {

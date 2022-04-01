@@ -186,6 +186,34 @@ describe('nc-be-news-app', () => {
       });
     });
 
+    it.only('Should return an array sorted by column and ASC or DESC from the inputs provided where topic is also from input', async () => {
+      const { body } = await request(app)
+        .get('/api/articles?sort_by=votes&order=desc&topic=mitch')
+        .expect(200);
+
+      const articles = body.articles;
+
+      expect(articles).toBeInstanceOf(Array);
+
+      expect(articles.length).toBe(11);
+
+      expect(articles).toBeSortedBy('votes', { descending: true });
+
+      expect(articles[0]).toEqual({
+        article_id: 1,
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        author: 'butter_bridge',
+        created_at: '2020-07-09T20:11:00.000Z',
+        votes: 100,
+        comment_count: '11',
+      });
+
+      articles.forEach((article) => {
+        expect(article.topic).toBe('mitch');
+      });
+    });
+
     it('Should return a 404 with an incorrect path', async () => {
       const { body } = await request(app).get('/api/notAPath').expect(404);
       expect(body.msg).toBe('Route not found!');

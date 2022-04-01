@@ -51,11 +51,14 @@ exports.updateItemById = async (req, res, next) => {
 };
 
 exports.getArticles = async (req, res, next) => {
+  const { sort_by, order, topic } = req.query;
+
   try {
-    const articleData = await selectArticles();
+    const articleData = await selectArticles(sort_by, order, topic);
 
     res.status(200).send({ articles: articleData });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
