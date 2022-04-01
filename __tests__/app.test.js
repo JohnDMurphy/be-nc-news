@@ -202,7 +202,7 @@ describe('nc-be-news-app', () => {
     });
   });
 
-  describe.only('GET article/:article_id/comments', () => {
+  describe('GET article/:article_id/comments', () => {
     it('Should return an array of objects for a given article id', async () => {
       const { body } = await request(app)
         .get('/api/articles/6/comments')
