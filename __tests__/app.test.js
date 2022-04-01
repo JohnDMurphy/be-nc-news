@@ -186,7 +186,7 @@ describe('nc-be-news-app', () => {
       });
     });
 
-    it.only('Should return an array sorted by column and ASC or DESC from the inputs provided where topic is also from input', async () => {
+    it('Should return an array sorted by column and ASC or DESC from the inputs provided where topic is also from input', async () => {
       const { body } = await request(app)
         .get('/api/articles?sort_by=votes&order=desc&topic=mitch')
         .expect(200);
