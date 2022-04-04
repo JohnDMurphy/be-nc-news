@@ -5,6 +5,7 @@ const {
   getArticleById,
   updateItemById,
   getArticles,
+  getCommentsByArticleId,
   postCommentById,
 } = require('./controllers/getArticleById.controllers.js');
 const { getUsers } = require('./controllers/getUsers.controllers.js');
@@ -22,6 +23,8 @@ app.patch('/api/articles/:article_id', updateItemById);
 app.get('/api/users', getUsers);
 
 app.get('/api/articles', getArticles);
+
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 
 app.post('/api/articles/:article_id/comments', postCommentById);
 
@@ -43,6 +46,10 @@ app.use((err, req, res, next) => {
     res.status(404).send({ msg: err.msg });
   } else if (err.msg === 'There was a problem with the input name') {
     res.status(400).send({ msg: err.msg });
+  } else if (
+    err.msg === 'the given ID does not exist or does not have any comments'
+  ) {
+    res.status(404).send({ msg: err.msg });
   } else {
     next(err);
   }

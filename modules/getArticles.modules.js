@@ -99,6 +99,17 @@ exports.selectArticles = async (sort_by, order, topic = undefined) => {
   }
 };
 
+exports.selectCommentsByArticle = async (article_id) => {
+  const res = await db.query(
+    ` SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;`,
+    [article_id]
+  );
+
+  const data = res.rows;
+
+  return data;
+};
+
 exports.addNewComment = async (article_id, author, body) => {
   if (typeof author !== 'string' || typeof body !== 'string') {
     return Promise.reject({ status: 400, msg: 'Incorrect Input Type' });
